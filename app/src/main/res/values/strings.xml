@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Ruut challenge</string>
+    <string name="name_placeholder">Name</string>
+    <string name="user_placeholder">Username</string>
+    <string name="password_placeholder">Password</string>
+    <string name="login">Login</string>
+    <string name="signup_helper">You don\'t have an account? Create a new one</string>
+    <string name="signup">Sign up</string>
+    <string name="signup_title">Getting started</string>
+    <string name="signup_subtitle">Create your personal account now to access this App</string>
+    <string name="create_account">Create account</string>
+    <string name="profile">Profile</string>
+    <string name="signout">Sign out</string>
+    <string name="alpha_vantage">Alpha Vantage</string>
 </resources>

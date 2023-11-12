@@ -2,6 +2,7 @@ package com.jp.ruutchallenge.ui.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,7 +20,9 @@ object Screens {
 
 @Composable
 fun MainScreen() {
+    val viewModel: MainScreenViewModel = hiltViewModel()
     val navController = rememberNavController()
+    viewModel.navController = navController
 
     NavHost(
         navController = navController,
@@ -27,16 +30,27 @@ fun MainScreen() {
         modifier = Modifier,
     ) {
         composable(route = Screens.LOGIN) {
-            LoginView()
+            LoginView(
+                goToMain = { viewModel.navigateToMain() },
+                goToSignUp = { viewModel.navigateToSignUp() }
+            )
         }
         composable(route = Screens.SIGN_UP) {
-            SignUpView()
+            SignUpView(
+                goToMain = { viewModel.navigateToMain() },
+                navigateUp = { navController.navigateUp() }
+            )
         }
         composable(route = Screens.MAIN) {
-            MainView()
+            MainView(
+                goToProfile = { viewModel.navigateToProfile() }
+            )
         }
         composable(route = Screens.PROFILE) {
-            ProfileView()
+            ProfileView(
+                goToLogin = { viewModel.navigateToLogin() },
+                navigateUp = { navController.navigateUp() }
+            )
         }
     }
 }
