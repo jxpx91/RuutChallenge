@@ -12,4 +12,9 @@
     <string name="profile">Profile</string>
     <string name="signout">Sign out</string>
     <string name="alpha_vantage">Alpha Vantage</string>
+    <string name="last_refreshed">Last refreshed: </string>
+    <string name="header_time">Time</string>
+    <string name="header_open">Open</string>
+    <string name="header_high">High</string>
+    <string name="header_low">Low</string>
 </resources>

@@ -11,17 +11,18 @@ class ApiRepository @Inject constructor() {
     private val apiService = RetrofitInstance.apiService
 
     suspend fun getData(): AlphaVantageResponse {
+        return AlphaVantageResponse.TEST
         // TODO: Request parameters for dynamic data
         val function = "TIME_SERIES_INTRADAY"
         val symbol = "IBM"
         val interval = "5min"
         val apiKey = "DR68D22NJOVGTD8S"
         val response = apiService.query(function, symbol, interval, apiKey)
-        return if (response.isSuccessful) {
-            response.body() ?: AlphaVantageResponse.EMPTY
+        return if (response.isSuccessful && response.body()?.metaData != null) {
+            response.body() ?: AlphaVantageResponse.TEST
         } else {
             Log.e(TAG, response.errorBody().toString())
-            AlphaVantageResponse.EMPTY
+            AlphaVantageResponse.TEST
         }
     }
 
