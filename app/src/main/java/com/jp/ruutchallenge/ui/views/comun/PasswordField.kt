@@ -28,6 +28,7 @@ fun PasswordField(
     onValueChange: (String) -> Unit,
     onGo: () -> Unit,
     passwordVisibleInit: Boolean = false,
+    isSignUp: Boolean = false,
 ) {
     var passwordVisible by rememberSaveable {
         mutableStateOf(passwordVisibleInit)
@@ -41,7 +42,9 @@ fun PasswordField(
             onValueChange(newText)
         },
         label = { Text(text = stringResource(id = R.string.password_placeholder)) },
-        placeholder = { Text(text = stringResource(id = R.string.password_placeholder)) },
+        placeholder = {
+            Text(text = stringResource(id = if (!isSignUp) R.string.password_placeholder else R.string.password_signup_placeholder))
+        },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
         keyboardActions = KeyboardActions(onGo = { onGo() }),
         trailingIcon = {

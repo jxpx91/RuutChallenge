@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Ruut challenge</string>
     <string name="name_placeholder">Name</string>
-    <string name="user_placeholder">Username</string>
+    <string name="user_placeholder">Email</string>
+    <string name="email_signup_placeholder">test@gmail.com</string>
     <string name="password_placeholder">Password</string>
+    <string name="password_signup_placeholder">Password(at least 6 characters)</string>
     <string name="login">Login</string>
     <string name="signup_helper">You don\'t have an account? Create a new one</string>
     <string name="signup">Sign up</string>

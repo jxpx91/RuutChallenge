@@ -7,6 +7,7 @@ import com.jp.ruutchallenge.extensions.toTwoDecimalDouble
 import com.jp.ruutchallenge.model.MetaData
 import com.jp.ruutchallenge.model.Serie
 import com.jp.ruutchallenge.model.SerieInfo
+import com.jp.ruutchallenge.service.AccountService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,11 +17,23 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val apiRepository: ApiRepository,
+    private val accountService: AccountService,
 ): ViewModel() {
 
     val metaData = MutableStateFlow(MetaData.EMPTY)
     val serieInfo = MutableStateFlow(listOf<SerieInfo>())
     val errorMessage = MutableStateFlow("")
+    val init = MutableStateFlow(true)
+
+    fun isUserLogged(onNoUserFound: () -> Unit): Boolean {
+        viewModelScope.launch {
+            init.emit(false)
+        }
+        if (accountService.hasUser().not()) {
+            onNoUserFound()
+        }
+        return accountService.hasUser()
+    }
 
     fun getData() {
         viewModelScope.launch {

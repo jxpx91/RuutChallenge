@@ -23,6 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jp.ruutchallenge.R
 import com.jp.ruutchallenge.ui.views.comun.TopBarAV
 
@@ -32,6 +33,7 @@ fun ProfileView(
     goToLogin: () -> Unit,
     navigateUp: () -> Unit,
 ) {
+    val viewModel: ProfileViewModel = hiltViewModel()
     Scaffold(
         topBar = {
             TopBarAV(
@@ -43,14 +45,16 @@ fun ProfileView(
             )
         },
         content = { padding ->
-            ProfileInfo(goToLogin)
+            ProfileInfo {
+                viewModel.signOut(goToLogin)
+            }
         }
     )
 }
 
 @Composable
 private fun ProfileInfo(
-    goToLogin: () -> Unit,
+    onSignOut: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -83,7 +87,7 @@ private fun ProfileInfo(
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.red_400),
                 contentColor = colorResource(id = R.color.white)),
-            onClick = { goToLogin() },
+            onClick = { onSignOut() },
         ) {
             Text(text = stringResource(id = R.string.signout))
         }

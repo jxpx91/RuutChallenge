@@ -26,12 +26,15 @@ fun MainScreen() {
 
     NavHost(
         navController = navController,
-        startDestination = Screens.LOGIN,
+        startDestination = Screens.MAIN,
         modifier = Modifier,
     ) {
         composable(route = Screens.LOGIN) {
             LoginView(
-                goToMain = { viewModel.navigateToMain() },
+                goToMain = {
+                    navController.popBackStack()
+                    viewModel.navigateToMain()
+               },
                 goToSignUp = { viewModel.navigateToSignUp() }
             )
         }
@@ -43,6 +46,7 @@ fun MainScreen() {
         }
         composable(route = Screens.MAIN) {
             MainView(
+                goToLogin = { viewModel.navigateToLogin() },
                 goToProfile = { viewModel.navigateToProfile() }
             )
         }

@@ -44,13 +44,18 @@ import com.jp.ruutchallenge.ui.views.comun.TopBarAV
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView(
+    goToLogin: () -> Unit,
     goToProfile: () -> Unit,
 ) {
     val viewModel: MainViewModel = hiltViewModel()
     val metadata by viewModel.metaData.collectAsState()
     val serieInfo by viewModel.serieInfo.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val isInit by viewModel.init.collectAsState()
     val context = LocalContext.current
+    LaunchedEffect(isInit) {
+        viewModel.isUserLogged(goToLogin)
+    }
     viewModel.getData()
 
     Scaffold(
