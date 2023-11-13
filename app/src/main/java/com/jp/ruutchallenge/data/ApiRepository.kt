@@ -11,7 +11,6 @@ class ApiRepository @Inject constructor() {
     private val apiService = RetrofitInstance.apiService
 
     suspend fun getData(): AlphaVantageResponse {
-        return AlphaVantageResponse.TEST
         // TODO: Request parameters for dynamic data
         val function = "TIME_SERIES_INTRADAY"
         val symbol = "IBM"
