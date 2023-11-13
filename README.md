@@ -8,6 +8,11 @@ Ruut technical interview challenge.
 Indications shown here:
 https://ruutmx.notion.site/Technical-Interview-for-Android-Developer-4377bf720a9f42799e985fcdf5e0c1fc
 
+### Video demo
+https://github.com/jxpx91/RuutChallenge/assets/17054032/3ab300a4-8b80-4b0f-b4a1-72c7bf395a29
+
+
+
 ### Screens
 1. **Login Screen**
     - Description: A screen where users can log in to the app.
