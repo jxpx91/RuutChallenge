@@ -3,6 +3,7 @@ package com.jp.ruutchallenge.ui.views.signup
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jp.ruutchallenge.data.room.UserRepository
 import com.jp.ruutchallenge.service.AccountService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val accountService: AccountService,
+    private val userRepository: UserRepository,
 ): ViewModel() {
 
     val errorMessage = MutableStateFlow("")
@@ -25,9 +27,9 @@ class SignUpViewModel @Inject constructor(
             if (result.first) {
                 accountService.currentUser.collect { user ->
                     Log.d("Sign up", "${user?.id}")
-                    if (user != null) {
-                        onSuccess()
-                    }
+                    if (user != null)
+                        userRepository.insertNewUser(user.id, name, email, pass)
+                    onSuccess()
                 }
             } else {
                 errorMessage.emit("An error occurred: ${result.second}")

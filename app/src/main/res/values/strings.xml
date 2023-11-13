@@ -6,6 +6,8 @@
     <string name="password_placeholder">Password</string>
     <string name="password_signup_placeholder">Password(at least 6 characters)</string>
     <string name="login">Login</string>
+    <string name="quick_title">Here are the users you have logged before:</string>
+    <string name="quick_login">Quick login</string>
     <string name="signup_helper">You don\'t have an account? Create a new one</string>
     <string name="signup">Sign up</string>
     <string name="signup_title">Getting started</string>
@@ -19,4 +21,5 @@
     <string name="header_open">Open</string>
     <string name="header_high">High</string>
     <string name="header_low">Low</string>
+    <string name="close">Close</string>
 </resources>

@@ -23,6 +23,10 @@ class AccountServiceImpl @Inject constructor(): AccountService {
             awaitClose { Firebase.auth.removeAuthStateListener(listener) }
         }
 
+    override fun getId(): String {
+        return Firebase.auth.currentUser?.uid ?: "Not id"
+    }
+
     override fun hasUser(): Boolean {
         return Firebase.auth.currentUser != null
     }

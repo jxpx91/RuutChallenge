@@ -3,12 +3,14 @@ package com.jp.ruutchallenge.ui.views.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jp.ruutchallenge.data.ApiRepository
+import com.jp.ruutchallenge.data.room.UserRepository
 import com.jp.ruutchallenge.extensions.toTwoDecimalDouble
 import com.jp.ruutchallenge.model.MetaData
 import com.jp.ruutchallenge.model.Serie
 import com.jp.ruutchallenge.model.SerieInfo
 import com.jp.ruutchallenge.service.AccountService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -18,12 +20,20 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val apiRepository: ApiRepository,
     private val accountService: AccountService,
+    private val userRepository: UserRepository,
 ): ViewModel() {
 
     val metaData = MutableStateFlow(MetaData.EMPTY)
     val serieInfo = MutableStateFlow(listOf<SerieInfo>())
     val errorMessage = MutableStateFlow("")
     val init = MutableStateFlow(true)
+
+    fun getUser() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val users = userRepository.getAllUsers()
+            users.size
+        }
+    }
 
     fun isUserLogged(onNoUserFound: () -> Unit): Boolean {
         viewModelScope.launch {

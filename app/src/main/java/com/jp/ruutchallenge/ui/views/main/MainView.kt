@@ -56,6 +56,7 @@ fun MainView(
     LaunchedEffect(isInit) {
         viewModel.isUserLogged(goToLogin)
     }
+    viewModel.getUser()
     viewModel.getData()
 
     Scaffold(

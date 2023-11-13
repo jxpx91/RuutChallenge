@@ -16,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -25,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jp.ruutchallenge.R
+import com.jp.ruutchallenge.data.room.entity.UserEntity
 import com.jp.ruutchallenge.ui.views.comun.TopBarAV
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,6 +37,8 @@ fun ProfileView(
     navigateUp: () -> Unit,
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
+    val userInfo by viewModel.userInfo.collectAsState()
+    viewModel.getUserData()
     Scaffold(
         topBar = {
             TopBarAV(
@@ -45,7 +50,9 @@ fun ProfileView(
             )
         },
         content = { padding ->
-            ProfileInfo {
+            ProfileInfo(
+                userInfo = userInfo
+            ) {
                 viewModel.signOut(goToLogin)
             }
         }
@@ -54,6 +61,7 @@ fun ProfileView(
 
 @Composable
 private fun ProfileInfo(
+    userInfo: UserEntity,
     onSignOut: () -> Unit,
 ) {
     Column(
@@ -77,7 +85,7 @@ private fun ProfileInfo(
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "User name",
+                text = userInfo.name,
                 style = MaterialTheme.typography.titleLarge,
             )
         }
@@ -89,7 +97,7 @@ private fun ProfileInfo(
                 contentColor = colorResource(id = R.color.white)),
             onClick = { onSignOut() },
         ) {
-            Text(text = stringResource(id = R.string.signout))
+            Text(text = "${stringResource(id = R.string.signout)} with ${userInfo.email}")
         }
     }
 }

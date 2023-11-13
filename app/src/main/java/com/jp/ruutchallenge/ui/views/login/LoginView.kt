@@ -4,15 +4,19 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,6 +47,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jp.ruutchallenge.R
+import com.jp.ruutchallenge.data.room.entity.UserEntity
 import com.jp.ruutchallenge.ui.views.comun.PasswordField
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -52,6 +57,7 @@ fun LoginView(
     goToSignUp: () -> Unit,
 ) {
     val viewModel: LoginViewModel = hiltViewModel()
+    val users by viewModel.users.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val context = LocalContext.current
@@ -62,6 +68,10 @@ fun LoginView(
     var passText by rememberSaveable {
         mutableStateOf("")
     }
+    var showQuickList by rememberSaveable {
+        mutableStateOf(false)
+    }
+    viewModel.getAllLinkedUsers()
 
     Scaffold(
         content = { padding ->
@@ -83,6 +93,7 @@ fun LoginView(
                 Spacer(modifier = Modifier.height(48.dp))
 
                 LoginForm(
+                    usersLinked = users,
                     userText = userText,
                     passText = passText,
                     onUserTextChange = {
@@ -97,7 +108,10 @@ fun LoginView(
                     ){
                         keyboardController?.hide()
                         goToMain()
-                    }}
+                    }},
+                    onQuickLinkClick = {
+                        showQuickList = true
+                    }
                 )
             }
         },
@@ -117,7 +131,7 @@ fun LoginView(
     AnimatedVisibility(visible = isLoading) {
         Box(modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white_transparent)),
+            .background(colorResource(id = R.color.black_transparent)),
             contentAlignment = Alignment.Center,
         ){
             CircularProgressIndicator(
@@ -126,16 +140,36 @@ fun LoginView(
             )
         }
     }
+
+    AnimatedVisibility(visible = showQuickList) {
+        QuickLink(
+            users = users,
+            onUserClick = {
+                viewModel.onSignInClick(
+                    email = it.email,
+                    pass = it.pass,
+                ){
+                    keyboardController?.hide()
+                    goToMain()
+                }
+                showQuickList = false
+            },
+            onCloseClick = {
+                showQuickList = false
+            },)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LoginForm(
+    usersLinked: List<UserEntity>,
     userText: String,
     onUserTextChange: (String) -> Unit,
     passText: String,
     onPassTextChange: (String) -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onQuickLinkClick: () -> Unit,
 ) {
     TextField(
         modifier = Modifier.fillMaxWidth(),
@@ -166,6 +200,18 @@ private fun LoginForm(
     ) {
         Text(text = stringResource(id = R.string.login))
     }
+    Spacer(modifier = Modifier.height(24.dp))
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        enabled = usersLinked.isNotEmpty(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = colorResource(id = R.color.purple_500),
+            disabledContainerColor = Color.Transparent),
+        onClick = { onQuickLinkClick() }
+    ) {
+        Text(text = stringResource(id = R.string.quick_login))
+    }
 }
 
 @Composable
@@ -190,6 +236,74 @@ private fun SignUp(
             onClick = { onSignUpClick() },
         ) {
             Text(text = stringResource(id = R.string.signup))
+        }
+    }
+}
+
+@Composable
+private fun QuickLink(
+    users: List<UserEntity>,
+    onUserClick: (UserEntity) -> Unit,
+    onCloseClick: () -> Unit,
+) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(colorResource(id = R.color.black_transparent))
+        .padding(horizontal = 32.dp)
+        .clickable(true) {},
+        contentAlignment = Alignment.Center,
+    ) {
+        Box(modifier = Modifier
+            .background(colorResource(id = R.color.white))
+            .padding(16.dp)
+        ) {
+            Column {
+                Text(text = stringResource(id = R.string.quick_title))
+                Spacer(modifier = Modifier.height(32.dp))
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    items(users) { user ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 16.dp)
+                                .clickable { onUserClick(user) }
+                        ) {
+                            Image(
+                                modifier = Modifier
+                                    .height(40.dp)
+                                    .fillMaxWidth(0.2f),
+                                painter = painterResource(id = R.drawable.ic_user),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                            )
+                            Column {
+                                Text(text = user.name)
+                                Text(text = user.email)
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.End,
+                ) {
+                    Button(
+                        onClick = onCloseClick,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            contentColor = colorResource(id = R.color.purple_500),
+                            disabledContainerColor = Color.Transparent),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.close)
+                        )
+                    }
+                }
+            }
         }
     }
 }

@@ -112,7 +112,7 @@ fun SignUpView(
     AnimatedVisibility(visible = isLoading) {
         Box(modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white_transparent)),
+            .background(colorResource(id = R.color.black_transparent)),
             contentAlignment = Alignment.Center,
         ){
             CircularProgressIndicator(
