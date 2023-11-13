@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "30425834208",
+    "project_id": "ruut-f80b4",
+    "storage_bucket": "ruut-f80b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30425834208:android:a944d2261b250b7634e685",
+        "android_client_info": {
+          "package_name": "com.jp.ruutchallenge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYo0jmad7oB8WZwe_I5QYqBYUtcp9gU6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
